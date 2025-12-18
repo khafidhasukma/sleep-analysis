@@ -22,15 +22,34 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Styling minimal
+# Custom CSS untuk styling
 st.markdown("""
     <style>
-    .main-header {
-        font-size: 2.2rem;
-        font-weight: 600;
-        color: #2c3e50;
+    /* Override default Streamlit styling */
+    .block-container {
+        padding-top: 2rem;
+    }
+    
+    /* Custom header style */
+    h1 {
+        font-size: 2.5rem !important;
+        font-weight: 700 !important;
+        color: #1e3a8a !important;
+        text-align: center !important;
+        margin-bottom: 0.5rem !important;
+    }
+    
+    .subtitle {
         text-align: center;
-        padding: 1rem 0;
+        color: #64748b;
+        font-size: 1.1rem;
+        margin-bottom: 2rem;
+    }
+    
+    /* Metric styling */
+    [data-testid="stMetricValue"] {
+        font-size: 1.8rem;
+        font-weight: 600;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -151,46 +170,51 @@ def show_recommendations(disorder_type):
     """Tampilkan rekomendasi berdasarkan tipe gangguan"""
     recommendations = {
         'None': {
-            'title': 'Kondisi tidur kamu baik',
+            'title': 'Kondisi Tidur Anda Baik',
             'type': 'success',
             'tips': [
-                'Pertahankan jadwal tidur yang teratur',
-                'Tetap aktif bergerak minimal 30 menit sehari',
-                'Kelola stress dengan baik',
-                'Batasi konsumsi kafein setelah jam 2 siang'
+                'Pertahankan pola tidur yang konsisten (tidur dan bangun di waktu yang sama)',
+                'Lakukan aktivitas fisik minimal 30 menit per hari',
+                'Terapkan teknik manajemen stress seperti meditasi atau yoga',
+                'Batasi konsumsi kafein setelah pukul 14.00',
+                'Ciptakan lingkungan tidur yang nyaman (gelap, sejuk, dan tenang)'
             ]
         },
         'Sleep Apnea': {
-            'title': 'Terdeteksi gejala Sleep Apnea',
+            'title': 'Terdeteksi Indikasi Sleep Apnea',
             'type': 'error',
             'tips': [
-                'Segera konsultasi ke dokter untuk penanganan lebih lanjut',
-                'Jika kelebihan berat badan, coba turunkan bertahap',
-                'Hindari tidur posisi telentang',
-                'Kurangi atau hentikan konsumsi alkohol dan rokok',
-                'Perhatikan gejala: ngorok keras, napas berhenti saat tidur, ngantuk berlebihan di siang hari'
+                'Segera konsultasikan dengan dokter spesialis tidur untuk evaluasi lebih lanjut',
+                'Pertimbangkan sleep study (polisomnografi) untuk diagnosis definitif',
+                'Jika mengalami kelebihan berat badan, lakukan program penurunan berat badan',
+                'Hindari posisi tidur telentang, gunakan bantal untuk mempertahankan posisi miring',
+                'Kurangi atau hentikan konsumsi alkohol dan berhenti merokok',
+                'Waspadai gejala: mendengkur keras, episode henti napas, kantuk berlebihan di siang hari'
             ]
         },
         'Insomnia': {
-            'title': 'Kemungkinan mengalami Insomnia',
+            'title': 'Terdeteksi Indikasi Insomnia',
             'type': 'warning',
             'tips': [
-                'Coba terapi CBT-I (terbukti efektif untuk insomnia)',
-                'Buat rutinitas sebelum tidur yang konsisten',
-                'Hindari layar HP/laptop minimal 1 jam sebelum tidur',
-                'Jangan minum kopi setelah jam 2 siang',
-                'Bangun di jam yang sama setiap hari termasuk weekend',
-                'Jangan tidur siang jika malam susah tidur'
+                'Pertimbangkan terapi CBT-I (Cognitive Behavioral Therapy for Insomnia)',
+                'Terapkan sleep hygiene: rutinitas tidur yang konsisten dan lingkungan kondusif',
+                'Hindari penggunaan gadget minimal 1-2 jam sebelum tidur',
+                'Batasi konsumsi kafein setelah pukul 14.00',
+                'Bangun pada waktu yang sama setiap hari, termasuk akhir pekan',
+                'Hindari tidur siang jika mengalami kesulitan tidur malam',
+                'Lakukan aktivitas relaksasi sebelum tidur (membaca, mendengar musik tenang)'
             ]
         },
         'default': {
-            'title': 'Konsultasi ke dokter untuk hasil lebih akurat',
+            'title': 'Konsultasi dengan Profesional Kesehatan',
             'type': 'info',
             'tips': [
+                'Lakukan konsultasi dengan dokter untuk diagnosis yang lebih akurat',
+                'Catat pola tidur Anda selama 1-2 minggu untuk evaluasi',
                 'Jaga jadwal tidur yang konsisten',
-                'Ciptakan suasana kamar yang nyaman untuk tidur',
-                'Olahraga teratur, tapi jangan terlalu dekat dengan jam tidur',
-                'Kelola stress dengan meditasi atau relaksasi'
+                'Ciptakan lingkungan tidur yang optimal',
+                'Lakukan aktivitas fisik teratur',
+                'Terapkan teknik manajemen stress'
             ]
         }
     }
@@ -222,7 +246,8 @@ with st.spinner('Memuat data...'):
     predictor, X_train, X_test, y_train, y_test, y_pred, df = load_model_and_data()
 
 # Header
-st.markdown('<p class="main-header">Cek Gangguan Tidur Kamu</p>', unsafe_allow_html=True)
+st.title("Analisis Gangguan Tidur")
+st.markdown('<p class="subtitle">Sistem prediksi berbasis Machine Learning untuk deteksi dini gangguan tidur</p>', unsafe_allow_html=True)
 
 # Sidebar
 st.sidebar.title("Menu")
@@ -233,7 +258,7 @@ menu = st.sidebar.radio(
 
 # HALAMAN BERANDA
 if menu == "Beranda":
-    st.subheader("Deteksi dini gangguan tidur pakai machine learning")
+    st.subheader("Deteksi Dini Gangguan Tidur dengan Machine Learning")
     
     col1, col2, col3 = st.columns(3)
     with col1:
@@ -245,21 +270,22 @@ if menu == "Beranda":
     
     st.markdown("---")
     
-    st.markdown("### Tentang Aplikasi")
+    st.markdown("### Tentang Sistem")
     st.write("""
-    Aplikasi ini membantu mendeteksi kemungkinan gangguan tidur berdasarkan data kesehatan 
-    dan kebiasaan harian kamu. Menggunakan algoritma Random Forest yang sudah dilatih 
-    dengan ratusan data untuk prediksi yang akurat.
+    Sistem ini dirancang untuk membantu deteksi dini gangguan tidur berdasarkan analisis 
+    data kesehatan dan pola aktivitas harian. Model prediksi menggunakan algoritma **Random Forest Classifier** 
+    yang telah dilatih dengan dataset komprehensif untuk menghasilkan prediksi akurat.
     
-    **Apa yang bisa kamu lakukan:**
-    - Cek apakah kamu berisiko gangguan tidur
-    - Lihat faktor-faktor yang mempengaruhi
-    - Dapatkan saran untuk tidur lebih berkualitas
+    **Fitur Utama:**
+    - Analisis risiko gangguan tidur berdasarkan profil kesehatan
+    - Evaluasi faktor-faktor yang mempengaruhi kualitas tidur
+    - Rekomendasi personal untuk meningkatkan kualitas tidur
+    - Visualisasi data dan pola tidur yang interaktif
     
-    **Jenis gangguan yang bisa dideteksi:**
-    - **Tidak ada gangguan** - Tidur kamu sehat
-    - **Sleep Apnea** - Gangguan pernapasan saat tidur
-    - **Insomnia** - Kesulitan tidur atau sering terbangun
+    **Kategori Gangguan Tidur:**
+    - **Normal** - Tidak terdeteksi gangguan tidur
+    - **Sleep Apnea** - Gangguan pernapasan saat tidur yang dapat mengganggu kualitas istirahat
+    - **Insomnia** - Kesulitan memulai atau mempertahankan tidur
     """)
     
     st.markdown("---")
@@ -287,10 +313,11 @@ if menu == "Beranda":
 
 # HALAMAN PREDIKSI
 elif menu == "Prediksi":
-    st.subheader("Isi data di bawah untuk cek kondisi tidur kamu")
+    st.subheader("Analisis Kondisi Tidur Anda")
+    st.write("Silakan lengkapi informasi berikut untuk mendapatkan hasil analisis gangguan tidur.")
     
     with st.form("prediction_form"):
-        st.markdown("#### Data Diri")
+        st.markdown("#### Informasi Demografis")
         col1, col2, col3 = st.columns(3)
         
         with col1:
@@ -305,7 +332,7 @@ elif menu == "Prediksi":
             systolic_bp = st.number_input("Tekanan Darah Atas", min_value=90, max_value=180, value=120)
             diastolic_bp = st.number_input("Tekanan Darah Bawah", min_value=60, max_value=120, value=80)
         
-        st.markdown("#### Data Tidur & Aktivitas")
+        st.markdown("#### Data Tidur dan Aktivitas Fisik")
         col1, col2, col3 = st.columns(3)
         
         with col1:
@@ -320,7 +347,7 @@ elif menu == "Prediksi":
             physical_activity = st.number_input("Aktivitas Fisik (menit/hari)", 0, 180, 60, 5)
             daily_steps = st.number_input("Jumlah Langkah Harian", 0, 20000, 7000, 100)
         
-        submit = st.form_submit_button("Cek Sekarang", use_container_width=True)
+        submit = st.form_submit_button("Analisis Sekarang", use_container_width=True)
     
     if submit:
         # Prepare data
@@ -354,13 +381,16 @@ elif menu == "Prediksi":
         
         with col1:
             if predicted_disorder == "None" or predicted_disorder == "nan":
-                st.success("**Tidak ada gangguan tidur**")
+                st.success("**Status: Normal**")
+                st.caption("Tidak terdeteksi gangguan tidur")
             elif predicted_disorder == "Sleep Apnea":
-                st.error(f"**{predicted_disorder}**")
+                st.error(f"**Status: {predicted_disorder}**")
+                st.caption("Terdeteksi gangguan pernapasan")
             elif predicted_disorder == "Insomnia":
-                st.warning(f"**{predicted_disorder}**")
+                st.warning(f"**Status: {predicted_disorder}**")
+                st.caption("Terdeteksi gangguan pola tidur")
             else:
-                st.info(f"**{predicted_disorder}**")
+                st.info(f"**Status: {predicted_disorder}**")
         
         with col2:
             st.write("**Tingkat Keyakinan:**")
@@ -393,13 +423,13 @@ elif menu == "Prediksi":
         st.markdown("---")
         
         # Rekomendasi
-        st.markdown("### Saran untuk Kamu")
+        st.markdown("### Rekomendasi")
         show_recommendations(predicted_disorder)
         
         st.markdown("---")
         
         # Health metrics
-        st.markdown("### Kondisi Kesehatan Kamu")
+        st.markdown("### Evaluasi Kondisi Kesehatan")
         health_eval = evaluate_health_metrics(
             sleep_duration, quality_of_sleep, systolic_bp, diastolic_bp,
             heart_rate, physical_activity, daily_steps
@@ -605,4 +635,12 @@ else:
 
 # Footer
 st.markdown("---")
-st.caption("Disclaimer: Hasil prediksi ini hanya untuk referensi awal. Untuk diagnosis yang akurat, konsultasi dengan dokter.")
+st.markdown("""
+<div style='text-align: center; padding: 1rem; background-color: #f8f9fa; border-radius: 0.5rem; margin-top: 2rem;'>
+    <p style='color: #6c757d; font-size: 0.9rem; margin: 0;'>
+        <strong>Disclaimer:</strong> Hasil analisis ini merupakan prediksi awal berdasarkan model machine learning 
+        dan tidak menggantikan diagnosis medis profesional. Untuk evaluasi dan penanganan yang lebih akurat, 
+        silakan konsultasikan dengan dokter atau tenaga medis profesional.
+    </p>
+</div>
+""", unsafe_allow_html=True)
